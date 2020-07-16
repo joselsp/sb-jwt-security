@@ -32,9 +32,9 @@ public class JwtUtil {
 
     private Boolean isTokenExpired(String token) { return extractExpiration(token).before(new Date()); }
 
-    public String generateToken( UserDetails userDetails) {
+    public String generateToken( String userName) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, userName);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
