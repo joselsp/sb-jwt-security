@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.keepcoding.jwtsecurity.filter.JwtFilter;
@@ -36,13 +38,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		return super.authenticationManagerBean();
 	}
 	
+	@Bean
+	public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+	
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors()
+		http.headers().frameOptions().sameOrigin()
 				.and()
 				.csrf()
 				.disable()
 				.authorizeRequests()
-				.antMatchers("/authenticate", "/sign-up", "/login", "/h2-console/**")
+				.antMatchers("/sign-up", "/login", "/h2-console/**")
 				.permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/**")
 				.permitAll()
